@@ -20,11 +20,16 @@ df2016 <- data.frame("Year" = 2016, "Date" = df2016$Culture.Sample.1.Timestamp,
                      "Laboratory.ID" = df2016$Culture.Test.ID, "Client.ID" = df2016$Beach, 
                      "Reading.1" = df2016$Culture.Sample.1.Reading, "Reading.2" = df2016$Culture.Sample.2.Reading,
                      "Escherichia.coli" = df2016$Culture.Reading.Mean, "Units" = NA, 
-                     "Sample.Collection.Time" = df2016$Culture.Sample.2.Timestamp)
+                     "Sample.Collection.Time" = df2016$Culture.Sample.2.Timestamp,
+                     "DNA.Test.ID" = df2016$DNA.Test.ID,
+                     "DNA.Sample.Timestamp" = df2016$DNA.Sample.Timestamp,
+                     "DNA.Sample.1.Reading" = df2016$DNA.Sample.1.Reading,
+                     "DNA.Sample.2.Reading" = df2016$DNA.Sample.2.Reading,
+                     "DNA.Reading.Mean" = df2016$DNA.Reading.Mean)
 df2016$Date <- as.character(df2016$Date, format='%B %d')
 
 # Combine Data
-beach_readings <- rbind(df2006, df2007, df2008, df2009, df2010, df2011, df2012, df2013, df2014, df2015, df2016)
+beach_readings <- rbind.fill(df2006, df2007, df2008, df2009, df2010, df2011, df2012, df2013, df2014, df2015, df2016)
 
 # Clean Data
 ## Remove greater or less-than markings
@@ -72,66 +77,76 @@ drekdata$Beach <- changenames[drekdata$Beach]
 predictions_2016 <- read.socrata("https://data.cityofchicago.org/resource/t62e-8nvc.csv")
 
 #map values so we have predictions for all beaches, per CPD standards
-predictions_12th <- data.frame("Beach" = "12th",
-                               "Date" = predictions_2016$Date[predictions_2016$Beach == "Ohio"],
+predictions_12th <- data.frame("Beach" = "12th Street",
+                               "Date" = predictions_2016$Date[predictions_2016$Beach.Name == "Ohio"],
                                "Drek_Reading" = NA,
-                               "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach == "Ohio"],
-                               "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach == "Ohio"])
-predictions_31st <- data.frame("Beach" = "31st",
-                               "Date" = predictions_2016$Date[predictions_2016$Beach == "63rdStreet"],
+                               "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach.Name == "Ohio"],
+                               "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach.Name == "Ohio"])
+predictions_31st <- data.frame("Beach" = "Margaret T Burroughs",
+                               "Date" = predictions_2016$Date[predictions_2016$Beach.Name == "63rdStreet"],
                                "Drek_Reading" = NA,
-                               "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach == "63rdStreet"],
-                               "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach == "63rdStreet"])
-predictions_39th <- data.frame("Beach" = "39th",
-                               "Date" = predictions_2016$Date[predictions_2016$Beach == "63rdStreet"],
+                               "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach.Name == "63rdStreet"],
+                               "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach.Name == "63rdStreet"])
+predictions_Oakwood <- data.frame("Beach" = "Oakwood",
+                               "Date" = predictions_2016$Date[predictions_2016$Beach.Name == "63rdStreet"],
                                "Drek_Reading" = NA,
-                               "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach == "63rdStreet"],
-                               "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach == "63rdStreet"])
-predictions_57th <- data.frame("Beach" = "57th",
-                               "Date" = predictions_2016$Date[predictions_2016$Beach == "63rdStreet"],
+                               "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach.Name == "63rdStreet"],
+                               "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach.Name == "63rdStreet"])
+predictions_57th <- data.frame("Beach" = "57th Street",
+                               "Date" = predictions_2016$Date[predictions_2016$Beach.Name == "63rdStreet"],
                                "Drek_Reading" = NA,
-                               "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach == "63rdStreet"],
-                               "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach == "63rdStreet"])
-predictions_39th <- data.frame("Beach" = "39th",
-                               "Date" = predictions_2016$Date[predictions_2016$Beach == "63rdStreet"],
+                               "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach.Name == "63rdStreet"],
+                               "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach.Name == "63rdStreet"])
+predictions_63rd <- data.frame("Beach" = "63rd Street",
+                               "Date" = predictions_2016$Date[predictions_2016$Beach.Name == "63rdStreet"],
                                "Drek_Reading" = NA,
-                               "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach == "63rdStreet"],
-                               "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach == "63rdStreet"])
-predictions_Albion <- data.frame("Beach" = "Albion",
-                               "Date" = predictions_2016$Date[predictions_2016$Beach == "Leone"],
-                               "Drek_Reading" = NA,
-                               "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach == "Leone"],
-                               "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach == "Leone"])
+                               "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach.Name == "63rdStreet"],
+                               "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach.Name == "63rdStreet"])
+predictions_Fargo <- data.frame("Beach" = "Fargo",
+                                 "Date" = predictions_2016$Date[predictions_2016$Beach.Name == "Leone"],
+                                 "Drek_Reading" = NA,
+                                 "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach.Name == "Leone"],
+                                 "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach.Name == "Leone"])
+predictions_Hartigan <- data.frame("Beach" = "Hartigan",
+                                 "Date" = predictions_2016$Date[predictions_2016$Beach.Name == "Leone"],
+                                 "Drek_Reading" = NA,
+                                 "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach.Name == "Leone"],
+                                 "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach.Name == "Leone"])
 predictions_Howard <- data.frame("Beach" = "Howard",
-                                 "Date" = predictions_2016$Date[predictions_2016$Beach == "Leone"],
+                                 "Date" = predictions_2016$Date[predictions_2016$Beach.Name == "Leone"],
                                  "Drek_Reading" = NA,
-                                 "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach == "Leone"],
-                                 "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach == "Leone"])
-predictions_Jarvis <- data.frame("Beach" = "Jarvis",
-                                 "Date" = predictions_2016$Date[predictions_2016$Beach == "Leone"],
-                                 "Drek_Reading" = NA,
-                                 "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach == "Leone"],
-                                 "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach == "Leone"])
+                                 "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach.Name == "Leone"],
+                                 "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach.Name == "Leone"])
 predictions_Juneway <- data.frame("Beach" = "Juneway",
-                                 "Date" = predictions_2016$Date[predictions_2016$Beach == "Leone"],
+                                 "Date" = predictions_2016$Date[predictions_2016$Beach.Name == "Leone"],
                                  "Drek_Reading" = NA,
-                                 "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach == "Leone"],
-                                 "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach == "Leone"])
-predictions_North <- data.frame("Beach" = "North",
-                                 "Date" = predictions_2016$Date[predictions_2016$Beach == "OakStreet"],
-                                 "Drek_Reading" = NA,
-                                 "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach == "OakStreet"],
-                                 "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach == "OakStreet"])
-predictions_Rogers <- data.frame("Beach" = "Rogers",
-                                "Date" = predictions_2016$Date[predictions_2016$Beach == "Leone"],
+                                 "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach.Name == "Leone"],
+                                 "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach.Name == "Leone"])
+predictions_North <- data.frame("Beach" = "North Avenue",
+                                "Date" = predictions_2016$Date[predictions_2016$Beach.Name == "OakStreet"],
                                 "Drek_Reading" = NA,
-                                "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach == "Leone"],
-                                "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach == "Leone"])
-predictions_SouthShore <- data.frame("Beach" = "South Shore",
-                                 "Date" = predictions_2016$Date[predictions_2016$Beach == "63rdStreet"],
+                                "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach.Name == "OakStreet"],
+                                "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach.Name == "OakStreet"])
+predictions_Oak <- data.frame("Beach" = "Oak Street",
+                               "Date" = predictions_2016$Date[predictions_2016$Beach.Name == "OakStreet"],
+                               "Drek_Reading" = NA,
+                               "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach.Name == "OakStreet"],
+                               "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach.Name == "OakStreet"])
+predictions_Ohio <- data.frame("Beach" = "Ohio Street",
+                                 "Date" = predictions_2016$Date[predictions_2016$Beach.Name == "Ohio"],
                                  "Drek_Reading" = NA,
-                                 "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach == "63rdStreet"],
-                                 "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach == "63rdStreet"])
+                                 "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach.Name == "Ohio"],
+                                 "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach.Name == "Ohio"])
+predictions_Rogers <- data.frame("Beach" = "Rogers",
+                                "Date" = predictions_2016$Date[predictions_2016$Beach.Name == "Leone"],
+                                "Drek_Reading" = NA,
+                                "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach.Name == "Leone"],
+                                "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach.Name == "Leone"])
+predictions_SouthShore <- data.frame("Beach" = "South Shore",
+                                 "Date" = predictions_2016$Date[predictions_2016$Beach.Name == "63rdStreet"],
+                                 "Drek_Reading" = NA,
+                                 "Drek_Prediction" = predictions_2016$Predicted.Level[predictions_2016$Beach.Name == "63rdStreet"],
+                                 "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory[predictions_2016$Beach.Name == "63rdStreet"])
 
 #align column names for merging
 predictions_2016 <- data.frame("Beach" = predictions_2016$Beach.Name,
@@ -140,9 +155,10 @@ predictions_2016 <- data.frame("Beach" = predictions_2016$Beach.Name,
                                "Drek_Prediction" = predictions_2016$Predicted.Level,
                                "Drek_Worst_Swim_Status" = predictions_2016$Swim.Advisory)
 
-predictions_2016 <- rbind(predictions_2016, predictions_12th, predictions_31st, predictions_39th,
-                          predictions_57th, predictions_Albion, predictions_Howard, predictions_Jarvis, 
-                          predictions_Juneway, predictions_North, predictions_Rogers, predictions_SouthShore) 
+predictions_2016 <- rbind(predictions_2016, predictions_12th, predictions_31st, predictions_Oakwood,
+                          predictions_57th, predictions_Howard, predictions_Juneway, predictions_North, 
+                          predictions_Rogers, predictions_SouthShore, predictions_Ohio, predictions_63rd, 
+                          predictions_Oak, predictions_Fargo, predictions_Hartigan) 
 
 drekdata <- rbind(drekdata, predictions_2016)
 ##Merge drek with beach_readings 
@@ -335,6 +351,11 @@ beach_readings_2015 <- beach_readings[beach_readings$Year==2015 &
 
 ###@ Analyze the relationship between Reading.1 and Reading.2 in 2015
 plot(beach_readings_2015$Reading.1, beach_readings_2015$Reading.2)
+plot(beach_readings_2015$Reading.1, beach_readings_2015$Reading.2, log=c('x', 'y'))
+plot(log(beach_readings_2015$Reading.1)+1, log(beach_readings_2015$Reading.2)+1, log=c('x', 'y'))
+llmodel <- lm(log(log(Reading.2)+1)~log(log(Reading.1)+1), data=beach_readings_2015)
+summary(llmodel)
+par(mfrow=c(2,2));plot(llmodel);par(mfrow=c(1,1))
 
 #### True positive -- correctly identifying elevated levels
 actual_positive <- sum(beach_readings_2015$elevated_levels_actual_calculated)
@@ -441,7 +462,7 @@ shift_previous_data <- function(number_of_observations, original_data_frame, nam
         new_column_name <- paste(number_of_observations,"daysPrior",column,sep=".")
         new_column_values <- vector()
         #build new columns
-        #for first n rows, use NA bc no prior data to use
+        #f or first n rows, use NA bc no prior data to use
         for (n in 1:number_of_observations) {         
           new_column_values[n] <- NA            
         }
@@ -462,299 +483,394 @@ shift_previous_data <- function(number_of_observations, original_data_frame, nam
 
 #Principal Component Analysis
 
-beach_readings_pca <- beach_readings
-cols_to_remove <- c("Transducer.Depth.Min", "Transducer.Depth.Max", "Transducer.Depth.Mean", "Rain.Intensity.Min", "Interval.Rain.Min", "Holiday.Flag", "precipIntensityMaxTime")
-beach_readings_pca <- beach_readings_pca[,!names(beach_readings_pca) %in% cols_to_remove]
-beach_readings_pca_shifted <- shift_previous_data(1,beach_readings_pca)
-new_shifted_col_names <- setdiff(colnames(beach_readings_pca_shifted),colnames(beach_readings_pca))
-beach_readings_pca_shifted_new_only <- beach_readings_pca_shifted[,new_shifted_col_names]
-cols_to_remove <- c("1.daysPrior.Year", "1.daysPrior.Reading.1", "1.daysPrior.Reading.2", "1.daysPrior.Escherichia.coli", "1.daysPrior.Drek_Reading", "1.daysPrior.Drek_Prediction", "1.daysPrior.e_coli_geomean_actual_calculated", "1.daysPrior.elevated_levels_actual_calculated", "1.daysPrior.Drek_elevated_levels_predicted_calculated")
-beach_readings_pca_shifted_new_only <- beach_readings_pca_shifted_new_only[,!names(beach_readings_pca_shifted_new_only) %in% cols_to_remove]
-beach_readings_pca <- cbind(beach_readings_pca_shifted$Reading.1, beach_readings_pca_shifted$Reading.2, beach_readings_pca_shifted$e_coli_geomean_actual_calculated, beach_readings_pca_shifted_new_only)
-names(beach_readings_pca)[1:3] <- c("Reading.1", "Reading.2", "e_coli_geomean_actual_calculated")
-beach_readings_pca <-  beach_readings_pca[,sapply(beach_readings_pca, is.numeric)]
-na_count <- sapply(beach_readings_pca, function(y) sum(is.na(y))) #analyze NAs
-beach_readings_pca <- beach_readings_pca[,na_count < 10000] #enforce NA maximum
-beach_readings_pca <- beach_readings_pca[complete.cases(beach_readings_pca),] #remove NAs
-beach_readings_pca <- beach_readings_pca[complete.cases(beach_readings_pca),]
-beach_readings_pca <- scale(beach_readings_pca)
-pca <- prcomp(beach_readings_pca)
-plot(pca, type = "l")
-aload <- abs(pca$rotation[,1:5])
-relative_contribution_to_PC <- sweep(aload, 2, colSums(aload), "/")
+#beach_readings_pca <- beach_readings
+#cols_to_remove <- c("Transducer.Depth.Min", "Transducer.Depth.Max", "Transducer.Depth.Mean", "Rain.Intensity.Min", "Interval.Rain.Min", "Holiday.Flag", "precipIntensityMaxTime")
+#beach_readings_pca <- beach_readings_pca[,!names(beach_readings_pca) %in% cols_to_remove]
+#beach_readings_pca_shifted <- shift_previous_data(1,beach_readings_pca)
+#new_shifted_col_names <- setdiff(colnames(beach_readings_pca_shifted),colnames(beach_readings_pca))
+#beach_readings_pca_shifted_new_only <- beach_readings_pca_shifted[,new_shifted_col_names]
+#cols_to_remove <- c("1.daysPrior.Year", "1.daysPrior.Reading.1", "1.daysPrior.Reading.2", "1.daysPrior.Escherichia.coli", "1.daysPrior.Drek_Reading", "1.daysPrior.Drek_Prediction", "1.daysPrior.e_coli_geomean_actual_calculated", "1.daysPrior.elevated_levels_actual_calculated", "1.daysPrior.Drek_elevated_levels_predicted_calculated")
+#beach_readings_pca_shifted_new_only <- beach_readings_pca_shifted_new_only[,!names(beach_readings_pca_shifted_new_only) %in% cols_to_remove]
+#beach_readings_pca <- cbind(beach_readings_pca_shifted$Reading.1, beach_readings_pca_shifted$Reading.2, beach_readings_pca_shifted$e_coli_geomean_actual_calculated, beach_readings_pca_shifted_new_only)
+#names(beach_readings_pca)[1:3] <- c("Reading.1", "Reading.2", "e_coli_geomean_actual_calculated")
+#beach_readings_pca <-  beach_readings_pca[,sapply(beach_readings_pca, is.numeric)]
+#na_count <- sapply(beach_readings_pca, function(y) sum(is.na(y))) #analyze NAs
+#beach_readings_pca <- beach_readings_pca[,na_count < 10000] #enforce NA maximum
+#beach_readings_pca <- beach_readings_pca[complete.cases(beach_readings_pca),] #remove NAs
+#beach_readings_pca <- beach_readings_pca[complete.cases(beach_readings_pca),]
+#beach_readings_pca <- scale(beach_readings_pca)
+#pca <- prcomp(beach_readings_pca)
+#plot(pca, type = "l")
+#aload <- abs(pca$rotation[,1:5])
+#relative_contribution_to_PC <- sweep(aload, 2, colSums(aload), "/")
 
+## add columns for predictor beaches
+## use for genetic testing analysis
+
+add_DNAmean_column <- function(df, beach) {
+  new_col <- c()
+  for (row in c(1:nrow(df))) {
+    this_date <- df$Full_date[row]
+    new_value <- df[df$Client.ID == beach & df$Full_date == this_date,"DNA.Reading.Mean"]
+    if (length(new_value) == 0)
+      new_col <- c(new_col, NA)
+    else
+      new_col <- c(new_col, new_value)
+  }
+  df <- cbind(df, new_col)
+  colnames(df)[ncol(df)] <- paste0(beach,"_DNAmean")
+  df
+}
+
+add_geomean_column <- function(df, beach) {
+  new_col <- c()
+  for (row in c(1:nrow(df))) {
+    this_date <- df$Full_date[row]
+    new_value <- df[df$Client.ID == beach & df$Full_date == this_date,"Escherichia.coli"]
+    if (length(new_value) == 0)
+      new_col <- c(new_col, NA)
+    else
+      new_col <- c(new_col, new_value)
+  }
+  df <- cbind(df, new_col)
+  colnames(df)[ncol(df)] <- paste0(beach,"_geomean")
+  df
+}
+
+#beach_readings <- add_geomean_column(beach_readings,"12th")
+#beach_readings <- add_geomean_column(beach_readings,"31st")
+#beach_readings <- add_geomean_column(beach_readings,"39th")
+#beach_readings <- add_geomean_column(beach_readings,"57th")
+beach_readings <- add_geomean_column(beach_readings,"63rd")
+#beach_readings <- add_geomean_column(beach_readings,"Albion")
+beach_readings <- add_geomean_column(beach_readings,"Calumet")
+#beach_readings <- add_geomean_column(beach_readings,"Foster")
+beach_readings <- add_geomean_column(beach_readings,"Howard")
+#beach_readings <- add_geomean_column(beach_readings,"Jarvis")
+#beach_readings <- add_geomean_column(beach_readings,"Juneway")
+#beach_readings <- add_geomean_column(beach_readings,"Leone")
+beach_readings <- add_geomean_column(beach_readings,"Montrose")
+#beach_readings <- add_geomean_column(beach_readings,"North Avenue")
+#beach_readings <- add_geomean_column(beach_readings,"Oak Street")
+#beach_readings <- add_geomean_column(beach_readings,"Ohio")
+#beach_readings <- add_geomean_column(beach_readings,"Osterman")
+beach_readings <- add_geomean_column(beach_readings,"Rainbow")
+#beach_readings <- add_geomean_column(beach_readings,"Rogers")
+beach_readings <- add_geomean_column(beach_readings,"South Shore")
+
+beach_readings <- add_DNAmean_column(beach_readings,"63rd")
+beach_readings <- add_DNAmean_column(beach_readings,"Calumet")
+beach_readings <- add_DNAmean_column(beach_readings,"Montrose")
+beach_readings <- add_DNAmean_column(beach_readings,"Rainbow")
+beach_readings <- add_DNAmean_column(beach_readings,"South Shore")
+# remove weekends before shifting data 
+# as a result, 1 day prior to a Monday will be a Friday
+# this is a choice made for modeling to avoid NAs on Mondays (or Tuesdays for 2.days.prior)
+beach_readings <- beach_readings[beach_readings$Weekday_code > 1 & beach_readings$Weekday_code < 7,]
+beach_readings <- shift_previous_data(1, beach_readings)
+beach_readings <- shift_previous_data(2, beach_readings)
+
+#remove drek prediction errors (readings under 0)
+beach_readings$Drek_Prediction <- ifelse(beach_readings$Drek_Prediction >= 0, beach_readings$Drek_Prediction, NA)
+
+##----------------------------------------------------------------------------------------------------------------
 ##  START MODELING AND VISUALIZATIONS
+##----------------------------------------------------------------------------------------------------------------
 
 library(randomForest)
 library(reshape)
 library(ggplot2)
-library(lda)
-library(MASS)
+#library(lda)
+#library(MASS)
 
-x <- beach_readings
-
-# remove weekends before shifting data 
-# as a result, 1 day prior to a Monday will be a Friday
-# this is a choice made for modeling to avoid NAs on Mondays (or Tuesdays for 2.days.prior)
-x <- x[x$Weekday_code > 1 & x$Weekday_code < 7,]
-x <- shift_previous_data(1, x)
-x <- shift_previous_data(2, x)
 
 ## Begin LDA
 ## LDA: http://www.r-bloggers.com/computing-and-visualizing-lda-in-r/
-
 ## Build out the year-by-year graph
 ## Each year seems to be different
 ## Run LDA for each year, get a model for each year
 ## See how predictors change
 ## Take out the days that the locks were open. 
 ## how to deal with binary data?
-
-x_LDA <- x[,c(2,12,15,18,19,101:271)]  #choose predictors
-x_LDA <- (x_LDA[,sapply(x_LDA, is.numeric)])# remove non-numerics
-na_count <- sapply(x_LDA, function(y) sum(is.na(y))) #analyze NAs
-x_LDA <- x_LDA[,na_count < 10000] #enforce NA maximum
-x_LDA_complete <- x_LDA[complete.cases(x_LDA),] #remove NAs
-x_LDA_complete_scaled <- data.frame(scale(x_LDA_complete)) #scale
-x_LDA_complete_scaled$elevated_levels_actual_calculated <- factor(x_LDA_complete$elevated_levels_actual_calculated) #replace scaled with binary
+#x_LDA <- x[,c(2,12,15,18,19,101:271)]  #choose predictors
+#x_LDA <- (x_LDA[,sapply(x_LDA, is.numeric)])# remove non-numerics
+#na_count <- sapply(x_LDA, function(y) sum(is.na(y))) #analyze NAs
+#x_LDA <- x_LDA[,na_count < 10000] #enforce NA maximum
+#x_LDA_complete <- x_LDA[complete.cases(x_LDA),] #remove NAs
+#x_LDA_complete_scaled <- data.frame(scale(x_LDA_complete)) #scale
+#x_LDA_complete_scaled$elevated_levels_actual_calculated <- factor(x_LDA_complete$elevated_levels_actual_calculated) #replace scaled with binary
 #x_LDA_complete_scaled$elevated_levels_actual_calculated <- factor(x_LDA_complete$'1.daysPrior.CRCW.Lock.Open') #replace scaled with binary
 #x_LDA_complete_scaled$elevated_levels_actual_calculated <- factor(x_LDA_complete$'1.daysPrior.Wilmette.Lock.Open') #replace scaled with binary
 #x_LDA_complete_scaled$elevated_levels_actual_calculated <- factor(x_LDA_complete$'2.daysPrior.Wilmette.Lock.Open') #replace scaled with binary
-x_LDA_complete <- x_LDA_complete[,-c(12,48)]
-LDA_results <- lda(elevated_levels_actual_calculated ~ ., x_LDA_complete)
-LDA_coefficients <- LDA_results$scaling[order(LDA_results$scaling),]
+#x_LDA_complete <- x_LDA_complete[,-c(12,48)]
+#LDA_results <- lda(elevated_levels_actual_calculated ~ ., x_LDA_complete)
+#LDA_coefficients <- LDA_results$scaling[order(LDA_results$scaling),]
 
-## End LDA
-
+##----------------------------------------------------------------------------------------------------------------
 ## MODEL 1
+##----------------------------------------------------------------------------------------------------------------
+
 ## Try more moving averages to get better weather trends
 ## https://www.researchgate.net/publication/23955184_Summer_E-coli_Patterns_and_Responses_along_23_Chicago_Beaches
 
+
 #use the worst 4 beaches
-#x1 <- x[x$Client.ID == "Calumet" | x$Client.ID == "63rd" | x$Client.ID == "Montrose" | x$Client.ID == "Rainbow",]
+#df <- df[df$Client.ID == "Calumet" | df$Client.ID == "63rd" | df$Client.ID == "Montrose" | df$Client.ID == "Rainbow",]
 
-x1 <- x
+#-----------------------------------------------------------------------------------------------------------------
+# Choose Predictors
+#-----------------------------------------------------------------------------------------------------------------
+  
+df <- beach_readings
+model1_data <- df
+model1_data <- model1_data[-c(1575,2961),] #remove duplicate rows
+model1_data <- model1_data[, c("e_coli_geomean_actual_calculated",
+                               #"63rd_DNAmean", # current DNA test
+                               #"South Shore_DNAmean", # current DNA test
+                               #"Montrose_DNAmean", # current DNA test
+                               #"Calumet_DNAmean", # current DNA test
+                               #"Rainbow_DNAmean", # current DNA test
+                               "63rd_geomean", 
+                               "South Shore_geomean", 
+                               "Montrose_geomean",
+                               "Calumet_geomean", 
+                               "Rainbow_geomean", 
+                               "Howard_geomean",
+                               "precipProbability",
+                               "1.daysPrior.precipIntensity",
+                               "Client.ID",
+                               "Full_date", #use for validating by exact date
+                               #"Year", #use for leave-one-year-out validation
+                               #"Day_of_year", #use to create random data splits without day bleed
+                               "Drek_Prediction")
+                           ]
+model1_data$Client.ID <- as.factor(model1_data$Client.ID)
+#model1_data$Weekday_code <- as.factor(model1_data$Weekday_code)
+#model1_data$Month <- as.factor(model1_data$Month)
+names(model1_data)[2] <- "n63rd_geomean" # Random forest doesn't like column beginning with a number
+names(model1_data)[3] <- "SouthShore_geomean" # Random forest doesn't like space in column name
+names(model1_data)[9] <- "n1.daysPrior.precipIntensity" # Random forest doesn't like column beginning with a number
+model1_data_vars <- ncol(model1_data)
 
-x_model <- data.frame(x1$e_coli_geomean_actual_calculated,
-                      #x1$'2.daysPrior.precipIntensity',
-                      #x1$'1.daysPrior.CRCW.Lock.Open',
-                      ##x1$'1.daysPrior.humidity',
-                      #x1$'2.daysPrior.Day_of_year',
-                      #x1$'2.daysPrior.CRCW.Lock.Open',
-                      x1$`1.daysPrior.precipIntensity`,
-                      x1$`2.daysPrior.precipIntensity`,
-                      #x1$Month_code,
-                      x1$Beach_code,
-                      #x1$Year,
-                      #x1$Weekday_code,
-                      #x1$'1.daysPrior.Wilmette.Lock.Open',
-                      #x1$'1.daysPrior.Day_of_year',
-                      #x1$'2.daysPrior.Wilmette.Lock.Open',
-                      x1$Full_date)
-x_model_complete <- x_model[complete.cases(x_model),] #remove NAs
-vars <- length(x_model)
-
-#Loop through years
+#-----------------------------------------------------------------------------------------------------------------
+# Loop through modeling once for each year
+#-----------------------------------------------------------------------------------------------------------------
 
 roc_curve <- data.frame()
-#for (year in unique(x_model_complete$x.Year)) {      
 for (year in c(2016)) {
+  print(year)
+  
+#-----------------------------------------------------------------------------------------------------------------
+# Create train / test sets
+# Downsample to achieve balance between high and low e. coli days
+#-----------------------------------------------------------------------------------------------------------------  
+  
+  ## TEST SET
+  
+  test <- model1_data[model1_data$Full_date >= "2015-01-01",]
+  #test <- model1_data[model1_data$Year == year,]
+  #test <- model1_data[model1_data$Year == year,
+  #                    c(1:model1_data_vars-1)]
+  # Reduce test set to non-predictor beaches
+  test <- test[which(!test$Client.ID %in% c("Rainbow",
+                                    "South Shore",
+                                    "Montrose",
+                                    "Calumet",
+                                    "63rd",
+                                    "Howard")),]
+  test <- test[complete.cases(test),] #remove NAs from test data
+  test_vars <- ncol(test)
 
+  ## TRAIN SET
+  
+  train <- model1_data[,
+                       c(1:model1_data_vars-1)] #remove EPA prediction from training data
+  # Reduce train set to non-predictor beaches
+  train <- train[which(!train$Client.ID %in% c("Rainbow",
+                                            "South Shore",
+                                            "Montrose",
+                                            "Calumet",
+                                            "63rd",
+                                            "Howard")),]
+  train <- train[train$Full_date < "2015-01-01" 
+                 & train$Full_date > "2006-01-01",]
+  #train <- train[!train$Year == year,]
+  train <- train[complete.cases(train),] #remove NAs from train data
+#  train_high <- train[train$e_coli_geomean_actual_calculated >= 200 
+#                      & train$e_coli_geomean_actual_calculated < 2500,]
+#  train_low <- train[train$e_coli_geomean_actual_calculated < 200,]
+  # only use as many low days as you have high days
+#  ind <- sample(c(1:nrow(train_low)), 
+#                nrow(train_high), 
+#                replace = TRUE)
+#  train_balanced <- rbind(train_high, train_low[ind,])
+#  train <- train_balanced
+  train_vars <- ncol(train)
+
+  ## the following will produce a random split
+  ## this will replace everthing done with test/train above
+  ## comment out if you want to use the above code
+  
   #set.seed(111)
-  #ind <- sample(2, nrow(x_model_complete), replace = TRUE, prob=c(0.7, 0.3))
-  #x_train <- x_model_complete[ind == 1,]
-  #x_test <- x_model_complete[ind == 2,]
-  #x_test_epa <- x_small_complete[ind == 2, c(1,3,4,5,7,8)]
+  #data_split <- model1_data[complete.cases(model1_data),]
+  #even_days <- data_split[data_split$Day_of_year %% 2 == 0,]
+  #odd_days <- data_split[data_split$Day_of_year %% 2 == 1,]
+  #ind_even <- sample(2, nrow(even_days), replace = TRUE, prob=c(0.5, 0.5))
+  #ind_odd <- sample(2, nrow(odd_days), replace = TRUE, prob=c(0.5, 0.5))
+  #test_even <- even_days[ind_even == 2,]
+  #test_odd <- odd_days[ind_odd == 2,] 
+  #train_even <- even_days[ind_even == 1,c(1:model1_data_vars-1)] #remove EPA prediction from training data
+  #train_odd <- odd_days[ind_odd == 1,c(1:model1_data_vars-1)] #remove EPA prediction from training data
+  #test <- rbind(test_even, test_odd)
+  #train <- rbind(train_even, train_odd)
+  #train_vars <- ncol(train)
+  #test_vars <- ncol(test)
   
-  #x_train <- x_model_complete[x_model_complete$x.Year %in% setdiff(unique(x_model_complete$x.Year),year),]
-  #x_test <- x_model_complete[x_model_complete$x.Year == year,]
-  #  x_test_epa <- x_model_by_year_complete[x_model_by_year_complete$x.Year == 2010,]
-
-  x_train <- x_model_complete[x_model_complete$x1.Full_date < "2016-01-01" & x_model_complete$x1.Full_date > "2006-01-01",]
-  x_test <- x_model_complete[x_model_complete$x1.Full_date >= "2016-01-01",]
-
+#-----------------------------------------------------------------------------------------------------------------
+# Model / Predict / Build ROC Curve
+#-----------------------------------------------------------------------------------------------------------------   
   
-  model <- randomForest(x1.e_coli_geomean_actual_calculated ~ ., data=x_train[1:vars-1])
-  x_test$prediction <- predict(model, x_test[1:vars-1])
-  #model <- randomForest(x1.e_coli_geomean_actual_calculated ~ ., data=x_train)
-  #x_test$prediction <- predict(model, x_test)
-  x_test$ecoli_binary <- ifelse(x_test$x1.e_coli_geomean_actual_calculated >= 235, 1, 0)
-  
-  
-  true_positive_rates = c()
-  false_positive_rates = c()
-  for (threshold in seq(0, 750, 1)) {
-    x_test$prediction_binary <- ifelse(x_test$prediction >= threshold, 1, 0)
-    x_test$true_positive <- ifelse((x_test$ecoli_binary == 1 & x_test$prediction_binary  == 1), 1, 0)
-    x_test$true_negative <- ifelse((x_test$ecoli_binary == 0 & x_test$prediction_binary  == 0), 1, 0)
-    x_test$false_negative <- ifelse((x_test$ecoli_binary == 1 & x_test$prediction_binary  == 0), 1, 0)
-    x_test$false_positive <- ifelse((x_test$ecoli_binary == 0 & x_test$prediction_binary  == 1), 1, 0)
-    true_positive_rates = c(true_positive_rates, (sum(x_test$true_positive) / (sum(x_test$true_positive) + sum(x_test$false_negative))))
-    false_positive_rates = c(false_positive_rates, (sum(x_test$false_positive) / (sum(x_test$false_positive) + sum(x_test$true_negative))))
+  model <- randomForest(e_coli_geomean_actual_calculated ~ ., data = train[,c(1:(train_vars-1))])
+  test$prediction <- predict(model, test[,c(1:(test_vars-2))])
+  test$ecoli_binary <- ifelse(test$e_coli_geomean_actual_calculated >= 235, 1, 0)
+  tpr = c()
+  fpr = c()
+  for (threshold in seq(0, 1500, 1)) {
+    test$prediction_binary <- ifelse(test$prediction >= threshold, 1, 0)
+    test$true_positive <- ifelse((test$ecoli_binary == 1 & test$prediction_binary  == 1), 1, 0)
+    test$true_negative <- ifelse((test$ecoli_binary == 0 & test$prediction_binary  == 0), 1, 0)
+    test$false_negative <- ifelse((test$ecoli_binary == 1 & test$prediction_binary  == 0), 1, 0)
+    test$false_positive <- ifelse((test$ecoli_binary == 0 & test$prediction_binary  == 1), 1, 0)
+    tpr = c(tpr, (sum(test$true_positive) / (sum(test$true_positive) + sum(test$false_negative))))
+    fpr = c(fpr, (sum(test$false_positive) / (sum(test$false_positive) + sum(test$true_negative))))
   }
-  
-  
-  roc_curve_by_year <- data.frame(year, true_positive_rates, false_positive_rates)
+  roc_curve_by_year <- data.frame(year, tpr, fpr)
   roc_curve <- rbind(roc_curve, roc_curve_by_year)
-  
-  
-#  print(year)
 }
 roc_curve$year <- as.factor(roc_curve$year)
-#roc_curve$year <- 2016
-ggplot(data=roc_curve, aes(x=false_positive_rates, y=true_positive_rates, color=year)) + geom_path()
-# p <- ggplot()
-# p + geom_path(aes(x = false_positive_rates, y = true_positive_rates, color = "My Model")) + geom_vline(xintercept = .05, color = "black") + ylim(0,1) + xlim(0,1)
+#ggplot(data=roc_curve, aes(x=fpr, y=tpr, color=year)) + geom_path()
 
-## MODEL 2
-## Using Principal Components (1 - 5) as predictors
+#-----------------------------------------------------------------------------------------------------------------
+# Build EPA ROC Curve for same test set
+#----------------------------------------------------------------------------------------------------------------- 
 
-## Append PCs to other data for models to work
-
-#x_model <- data.frame(pca$x[,1:5])
-#x_model_complete <- x_model[complete.cases(x_model),] #remove NAs
-
-
-#Loop through years
-
-#roc_curve <- data.frame()
-#for (year in unique(x_model_complete$x.Year)) {        
-  
-#  set.seed(111)
-  #  ind <- sample(2, nrow(x_model_complete_2015), replace = TRUE, prob=c(0.7, 0.3))
-  #  x_train <- x_model_complete_2015[ind == 1,]
-  #  x_test <- x_model_complete_2015[ind == 2,]
-  #  x_test_epa <- x_small_complete[ind == 2, c(1,3,4,5,7,8)]
-  
-#  x_train <- x_model_complete[x_model_complete$x.Year %in% setdiff(unique(x_model_complete$x.Year),year),]
-#  x_test <- x_model_complete[x_model_complete$x.Year == year,]
-  #  x_test_epa <- x_model_by_year_complete[x_model_by_year_complete$x.Year == 2010,]
-  
-  
-#  model <- randomForest(x.e_coli_geomean_actual_calculated ~ ., data=x_train[1:20])
-#  x_test$prediction <- predict(model, x_test[1:20])
-#  x_test$ecoli_binary <- ifelse(x_test$x.e_coli_geomean_actual_calculated >= 235, 1, 0)
-  
-#  true_positive_rates = c()
-#  false_positive_rates = c()
-#  for (threshold in seq(0, 750, 1)) {
-#    x_test$prediction_binary <- ifelse(x_test$prediction >= threshold, 1, 0)
-#    x_test$true_positive <- ifelse((x_test$ecoli_binary == 1 & x_test$prediction_binary  == 1), 1, 0)
-#    x_test$true_negative <- ifelse((x_test$ecoli_binary == 0 & x_test$prediction_binary  == 0), 1, 0)
-#    x_test$false_negative <- ifelse((x_test$ecoli_binary == 1 & x_test$prediction_binary  == 0), 1, 0)
-#    x_test$false_positive <- ifelse((x_test$ecoli_binary == 0 & x_test$prediction_binary  == 1), 1, 0)
-#    true_positive_rates = c(true_positive_rates, (sum(x_test$true_positive) / (sum(x_test$true_positive) + sum(x_test$false_negative))))
-#    false_positive_rates = c(false_positive_rates, (sum(x_test$false_positive) / (sum(x_test$false_positive) + sum(x_test$true_negative))))
-#  }
-  
-  
-#  roc_curve_by_year <- data.frame(year, true_positive_rates, false_positive_rates)
-#  roc_curve <- rbind(roc_curve, roc_curve_by_year)
-  
-  
-#  print(year)
-#}
-#roc_curve$year <- as.factor(roc_curve$year)
-#ggplot(data=roc_curve, aes(x=false_positive_rates, y=true_positive_rates, color=year)) + geom_path()
-
-##  MODEL 3: ROC FOR EPA booster model
-##  Only includes the beaches with water sensors in 2016
-
-#x3 <- x[x$Client.ID == "Calumet" | x$Client.ID == "Montrose" | x$Client.ID == "Ohio",]
-#x3 <- x[x$Client.ID == "Calumet" | x$Client.ID == "63rd" | x$Client.ID == "Montrose" | x$Client.ID == "Rainbow",]
-x3 <- x
-
-#  LDA to choose model predictors
-
-x3_LDA <- x[x$Year == "2015" | x$Year == "2016",c(2,12,15,18,19,101:184)]  #choose predictors for LDA
-x3_LDA <- (x3_LDA[,sapply(x3_LDA, is.numeric)])# remove non-numerics
-x3_na_count <- sapply(x3_LDA, function(y) sum(is.na(y))) #analyze NAs
-x3_LDA <- x3_LDA[,x3_na_count < 1800] #enforce NA maximum
-x3_LDA_complete <- x3_LDA[complete.cases(x3_LDA),] #remove NAs
-x3_LDA_complete <- x3_LDA_complete[,-c(32,47)]
-x3_LDA_results <- lda(elevated_levels_actual_calculated ~ ., data=x3_LDA_complete)
-x3_LDA_coefficients <- x3_LDA_results$scaling[order(x3_LDA_results$scaling),]
-
-# build model
-
-#`1.daysPrior.Year`                                       `1.daysPrior.precipIntensity` 
-#-5.850576e+01                                            -2.969288e+01 
-#`1.daysPrior.Wave.Height.Mean`                           `1.daysPrior.Wave.Height.Min` 
-#-7.244513e+00                                            -2.779521e+00 
-#`1.daysPrior.Drek_elevated_levels_predicted_calculated`  `1.daysPrior.apparentTemperatureMin` 
-#-8.142072e-01                                            -4.931445e-01 
-#`1.daysPrior.temperatureMin`                             `1.daysPrior.Interval.Rain.Mean` 
-#5.031347e-01                                             6.060437e-01 
-#`1.daysPrior.precipIntensityMax`                         `1.daysPrior.moonPhase` 
-#6.488877e-01                                             9.923320e-01 
-#Drek_elevated_levels_predicted_calculated                `1.daysPrior.humidity` 
-#2.833475e+00                                             3.002202e+00 
-#`1.daysPrior.Wave.Height.Max` 
-#4.544569e+00 
-
-
-x_small <- data.frame(x3$e_coli_geomean_actual_calculated, 
-                      x3$Full_date,
-                      x3$Drek_Prediction)
-x_model_complete_2 <- x_small[complete.cases(x_small),]
-vars <- length(x_small)    
-
-#set.seed(12345)
-#ind <- sample(2, nrow(x_model_complete_2), replace = TRUE, prob=c(0.8, 0.2))
-#x_train <- x_model_complete_2[x_model_complete_2$x3.Year=="2015",c(1,3:vars-1)]
-#x_test <- x_model_complete_2[x_model_complete_2$x3.Year=="2016",c(1,3:vars-1)]
-x_test_epa <- x_model_complete_2[x_model_complete_2$x3.Full_date >= "2016-01-01", c(1,vars)] 
-
-model <- randomForest(x_train$x3.e_coli_geomean_actual_calculated ~ ., data=x_train)
-x_test$prediction <- predict(model, x_test)
-x_test$ecoli_binary <- ifelse(x_test$x3.e_coli_geomean_actual_calculated >= 235, 1, 0)
-
-true_positive_rates = c()
-false_positive_rates = c()
-for (threshold in seq(0, 1323, 1)) {
-  x_test$prediction_binary <- ifelse(x_test$prediction >= threshold, 1, 0)
-  x_test$true_positive <- ifelse((x_test$ecoli_binary == 1 & x_test$prediction_binary  == 1), 1, 0)
-  x_test$true_negative <- ifelse((x_test$ecoli_binary == 0 & x_test$prediction_binary  == 0), 1, 0)
-  x_test$false_negative <- ifelse((x_test$ecoli_binary == 1 & x_test$prediction_binary  == 0), 1, 0)
-  x_test$false_positive <- ifelse((x_test$ecoli_binary == 0 & x_test$prediction_binary  == 1), 1, 0)
-  true_positive_rates = c(true_positive_rates, (sum(x_test$true_positive) / (sum(x_test$true_positive) + sum(x_test$false_negative))))
-  false_positive_rates = c(false_positive_rates, (sum(x_test$false_positive) / (sum(x_test$false_positive) + sum(x_test$true_negative))))
-  #print(paste0("Threshold = ", threshold, "     TPR = ", 
-  #             true_positive_rates[threshold+1], "     FPR = ", 
-  #             false_positive_rates[threshold+1]))
+epa_tpr = c()
+epa_fpr = c()
+for (threshold in seq(0, 1500, 1)) {
+  test$Drek_binary <- ifelse(test$Drek_Prediction >= threshold, 1, 0)
+  test$true_positive <- ifelse((test$ecoli_binary == 1 & test$Drek_binary  == 1), 1, 0)
+  test$true_negative <- ifelse((test$ecoli_binary == 0 & test$Drek_binary  == 0), 1, 0)
+  test$false_negative <- ifelse((test$ecoli_binary == 1 & test$Drek_binary  == 0), 1, 0)
+  test$false_positive <- ifelse((test$ecoli_binary == 0 & test$Drek_binary  == 1), 1, 0)
+  epa_tpr <- c(epa_tpr, (sum(test$true_positive) / (sum(test$true_positive) + sum(test$false_negative))))
+  epa_fpr <- c(epa_fpr, (sum(test$false_positive) / (sum(test$false_positive) + sum(test$true_negative))))
 }
-x_test_epa$ecoli_binary <- ifelse(x_test_epa$x3.e_coli_geomean_actual_calculated >= 235, 1, 0)
-epa_true_positive_rates = c()
-epa_false_positive_rates = c()
-for (threshold in seq(0, 1323, 1)) {
-  x_test_epa$Drek_elevated_levels_predicted_calculated <- ifelse(x_test_epa$x3.Drek_Prediction >= threshold, 1, 0)
-  x_test_epa$true_positive <- ifelse((x_test_epa$ecoli_binary == 1 & x_test_epa$Drek_elevated_levels_predicted_calculated  == 1), 1, 0)
-  x_test_epa$true_negative <- ifelse((x_test_epa$ecoli_binary == 0 & x_test_epa$Drek_elevated_levels_predicted_calculated  == 0), 1, 0)
-  x_test_epa$false_negative <- ifelse((x_test_epa$ecoli_binary == 1 & x_test_epa$Drek_elevated_levels_predicted_calculated  == 0), 1, 0)
-  x_test_epa$false_positive <- ifelse((x_test_epa$ecoli_binary == 0 & x_test_epa$Drek_elevated_levels_predicted_calculated  == 1), 1, 0)
-  epa_true_positive_rates <- c(epa_true_positive_rates, (sum(x_test_epa$true_positive) / (sum(x_test_epa$true_positive) + sum(x_test_epa$false_negative))))
-  epa_false_positive_rates <- c(epa_false_positive_rates, (sum(x_test_epa$false_positive) / (sum(x_test_epa$false_positive) + sum(x_test_epa$true_negative))))
-}
+
+#-----------------------------------------------------------------------------------------------------------------
+# Plot ROC Curves 
+#----------------------------------------------------------------------------------------------------------------- 
+
 p <- ggplot() 
-p + geom_path(aes(x = false_positive_rates, y = true_positive_rates), color = "blue") + geom_path(aes(x = epa_false_positive_rates, y = epa_true_positive_rates), color = "red") + ylim(0,1) + xlim(0,1) + ggtitle("2016 Predictions ROC")
-p + geom_path(aes(x = false_positive_rates, y = true_positive_rates), color = "blue") + geom_path(aes(x = epa_false_positive_rates, y = epa_true_positive_rates), color = "red") + ylim(0,.5) + xlim(0,.1) + ggtitle("2016 Prediction ROC")
-##  PRECISION / RECALL  ##
+p + 
+  geom_path(aes(x = fpr, y = tpr), 
+            color = "blue") + 
+  geom_path(aes(x = epa_fpr, y = epa_tpr), 
+            color = "red") + 
+  ylim(0,1) + 
+  xlim(0,1) + 
+  ggtitle("2015-2016 Geomean Model ROC Curve")
+p + 
+  geom_path(aes(x = fpr, y = tpr), 
+            color = "blue") + 
+  geom_path(aes(x = epa_fpr, y = epa_tpr), 
+            color = "red") + 
+  ylim(0,.75) + 
+  xlim(0,.1) + 
+  ggtitle("2015-2016 Geomean Model ROC Curve")
+
+#-----------------------------------------------------------------------------------------------------------------
+# Plot PR Curves
+#-----------------------------------------------------------------------------------------------------------------
 
 precision = c()
 recall = c()
-for (threshold in seq(0, 1323, 1)) {
-  x_test$prediction_binary <- ifelse(x_test$prediction >= threshold, 1, 0)
-  x_test$true_positive <- ifelse((x_test$ecoli_binary == 1 & x_test$prediction_binary  == 1), 1, 0)
-  x_test$true_negative <- ifelse((x_test$ecoli_binary == 0 & x_test$prediction_binary  == 0), 1, 0)
-  x_test$false_negative <- ifelse((x_test$ecoli_binary == 1 & x_test$prediction_binary  == 0), 1, 0)
-  x_test$false_positive <- ifelse((x_test$ecoli_binary == 0 & x_test$prediction_binary  == 1), 1, 0)
-  precision = c(precision, (sum(x_test$true_positive) / (sum(x_test$true_positive) + sum(x_test$false_positive))))
-  recall = c(recall, (sum(x_test$true_positive) / (sum(x_test$true_positive) + sum(x_test$false_negative))))
-  #print(paste0("Threshold = ", threshold, "     Precision = ", 
-  #             (sum(x_test$true_positive) / (sum(x_test$true_positive) + sum(x_test$false_positive))), "     Recall = ", 
-  #             (sum(x_test$true_positive) / (sum(x_test$true_positive) + sum(x_test$false_negative)))))
+for (threshold in seq(0, 1500, 1)) {
+  test$prediction_binary <- ifelse(test$prediction >= threshold, 1, 0)
+  test$true_positive <- ifelse((test$ecoli_binary == 1 & test$prediction_binary  == 1), 1, 0)
+  test$true_negative <- ifelse((test$ecoli_binary == 0 & test$prediction_binary  == 0), 1, 0)
+  test$false_negative <- ifelse((test$ecoli_binary == 1 & test$prediction_binary  == 0), 1, 0)
+  test$false_positive <- ifelse((test$ecoli_binary == 0 & test$prediction_binary  == 1), 1, 0)
+  precision = c(precision, (sum(test$true_positive) / (sum(test$true_positive) + sum(test$false_positive))))
+  recall = c(recall, (sum(test$true_positive) / (sum(test$true_positive) + sum(test$false_negative))))
+}
+epa_precision = c()
+epa_recall = c()
+for (threshold in seq(0, 1500, 1)) {
+  test$Drek_binary <- ifelse(test$Drek_Prediction >= threshold, 1, 0)
+  test$true_positive <- ifelse((test$ecoli_binary == 1 & test$Drek_binary  == 1), 1, 0)
+  test$true_negative <- ifelse((test$ecoli_binary == 0 & test$Drek_binary  == 0), 1, 0)
+  test$false_negative <- ifelse((test$ecoli_binary == 1 & test$Drek_binary  == 0), 1, 0)
+  test$false_positive <- ifelse((test$ecoli_binary == 0 & test$Drek_binary  == 1), 1, 0)
+  epa_precision <- c(epa_precision, (sum(test$true_positive) / (sum(test$true_positive) + sum(test$false_positive))))
+  epa_recall <- c(epa_recall, (sum(test$true_positive) / (sum(test$true_positive) + sum(test$false_negative))))
 }
 
-ggplot() + geom_path(aes(x = recall, y = precision), color = "blue") + ylim(0,1) + xlim(0,1)
-#ggsave(file="PR-Curve.png")
+p + 
+  geom_path(aes(x = recall, y = precision),
+            color = "blue") +
+  geom_path(aes(x = epa_recall, y = epa_precision),
+            color = "red") +
+  ylim(0,1) + 
+  xlim(0,1) +
+  ggtitle("2015-2016 Geomean Model PR Curve")
 
+
+#-----------------------------------------------------------------------------------------------------------------
+# Look at Genetic Tests
+#-----------------------------------------------------------------------------------------------------------------
+
+#dna <- df[,c(1:15)] # remove culture test columns
+#summary(dna)
+#plot(dna$DNA.Sample.1.Reading, dna$DNA.Sample.2.Reading)
+#plot(dna$DNA.Sample.1.Reading, dna$DNA.Sample.2.Reading, log=c('x', 'y'))
+#plot(log(dna$DNA.Sample.1.Reading)+1, log(dna$DNA.Sample.2.Reading)+1, log=c('x', 'y'))
+#plot(dna$Escherichia.coli, dna$DNA.Reading.Mean)
+#plot(dna$Escherichia.coli, dna$DNA.Reading.Mean, log=c('x', 'y'))
+#plot(log(dna$Escherichia.coli)+1, log(dna$DNA.Reading.Mean)+1, log=c('x', 'y'))
+#llmodel <- lm(log(log(Escherichia.coli)+1)~log(log(dna$DNA.Reading.Mean)+1), data=dna)
+#summary(llmodel)
+#par(mfrow=c(2,2));plot(llmodel);par(mfrow=c(1,1))
+#hist(dna$DNA.Reading.Mean)
+
+
+#-----------------------------------------------------------------------------------------------------------------
+# Calculate USGS Confusion Matrix
+#-----------------------------------------------------------------------------------------------------------------
+
+df_2015 <- beach_readings[beach_readings$Year == "2015",]
+df_2015 <- df_2015[!is.na(df_2015$Drek_elevated_levels_predicted_calculated),]
+df_2015 <- df_2015[!is.na(df_2015$elevated_levels_actual_calculated),]
+tp <- ifelse((df_2015$elevated_levels_actual_calculated == 1 & df_2015$Drek_elevated_levels_predicted_calculated  == 1), 1, 0)
+tn <- ifelse((df_2015$elevated_levels_actual_calculated == 0 & df_2015$Drek_elevated_levels_predicted_calculated  == 0), 1, 0)
+fn <- ifelse((df_2015$elevated_levels_actual_calculated == 1 & df_2015$Drek_elevated_levels_predicted_calculated  == 0), 1, 0)
+fp <- ifelse((df_2015$elevated_levels_actual_calculated == 0 & df_2015$Drek_elevated_levels_predicted_calculated  == 1), 1, 0)
+print(paste0("True Positives = ", sum(tp)))
+print(paste0("True Negatives = ", sum(tn)))
+print(paste0("False Positives = ", sum(fp)))
+print(paste0("False Negatives = ", sum(fn)))
+print(paste0("2015 True Positive Rate = ",(sum(tp)/(sum(tp)+sum(fn)))))
+print(paste0("2015 False Positive Rate = ",(sum(fp)/(sum(fp)+sum(tn)))))
+
+df_2016 <- beach_readings[beach_readings$Year == "2016",]
+df_2016 <- df_2016[!is.na(df_2016$Drek_elevated_levels_predicted_calculated),]
+df_2016 <- df_2016[!is.na(df_2016$elevated_levels_actual_calculated),]
+tp <- ifelse((df_2016$elevated_levels_actual_calculated == 1 & df_2016$Drek_elevated_levels_predicted_calculated  == 1), 1, 0)
+tn <- ifelse((df_2016$elevated_levels_actual_calculated == 0 & df_2016$Drek_elevated_levels_predicted_calculated  == 0), 1, 0)
+fn <- ifelse((df_2016$elevated_levels_actual_calculated == 1 & df_2016$Drek_elevated_levels_predicted_calculated  == 0), 1, 0)
+fp <- ifelse((df_2016$elevated_levels_actual_calculated == 0 & df_2016$Drek_elevated_levels_predicted_calculated  == 1), 1, 0)
+print(paste0("True Positives = ", sum(tp)))
+print(paste0("True Negatives = ", sum(tn)))
+print(paste0("False Positives = ", sum(fp)))
+print(paste0("False Negatives = ", sum(fn)))
+print(paste0("2016 True Positive Rate = ",(sum(tp)/(sum(tp)+sum(fn)))))
+print(paste0("2016 False Positive Rate = ",(sum(fp)/(sum(fp)+sum(tn)))))

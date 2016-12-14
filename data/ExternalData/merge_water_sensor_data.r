@@ -73,6 +73,8 @@ beach_readings <- beach_readings[order(-as.numeric(beach_readings$Full_date)), c
   "Client.ID",  "Full_date", "Year", "Date",
   "Laboratory.ID", "Reading.1", "Reading.2",
   "Escherichia.coli", "Units", "Sample.Collection.Time",
+  "DNA.Test.ID", "DNA.Sample.Timestamp", "DNA.Sample.1.Reading",
+  "DNA.Sample.2.Reading", "DNA.Reading.Mean",
   "Weekday", "Month", "Day",
   "Drek_Reading", "Drek_Prediction", "Drek_Worst_Swim_Status",
   "e_coli_geomean_actual_calculated", "elevated_levels_actual_calculated", "Drek_elevated_levels_predicted_calculated",
